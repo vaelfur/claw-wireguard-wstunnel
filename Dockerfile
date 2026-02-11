@@ -1,8 +1,8 @@
 FROM linuxserver/wireguard:latest
 
 # Устанавливаем wstunnel + dos2unix (для фикса CRLF)
-RUN apk add --no-cache curl dos2unix \
-    && curl -L https://github.com/erebe/wstunnel/releases/latest/download/wstunnel_linux_amd64 \
+RUN apk add --no-cache curl \
+    && curl -L https://github.com/erebe/wstunnel/releases/latest/download/wstunnel_linux_arm64 \
        -o /usr/local/bin/wstunnel \
     && chmod +x /usr/local/bin/wstunnel
 
