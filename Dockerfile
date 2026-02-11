@@ -1,13 +1,19 @@
 FROM linuxserver/wireguard:latest
 
-# Устанавливаем wstunnel
-RUN apk add --no-cache curl \
-    && curl -L https://github.com/erebe/wstunnel/releases/latest/download/wstunnel_linux_x86_64 \
+# Устанавливаем wstunnel + dos2unix (для фикса CRLF)
+RUN apk add --no-cache curl dos2unix \
+    && curl -L https://github.com/erebe/wstunnel/releases/latest/download/wstunnel_linux_amd64 \
        -o /usr/local/bin/wstunnel \
     && chmod +x /usr/local/bin/wstunnel
 
+# Копируем файлы
+COPY wg0.conf /config/wg0.conf
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+
+# Фиксим line endings и права
+RUN dos2unix /entrypoint.sh && \
+    chmod +x /entrypoint.sh && \
+    chmod 644 /config/wg0.conf  # если нужно
 
 EXPOSE 8080
 
